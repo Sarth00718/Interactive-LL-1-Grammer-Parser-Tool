@@ -26,9 +26,27 @@ export default function App() {
   const [sampleInput, setSampleInput] = useState('id + id * id')
   const [parseResult, setParseResult] = useState(null)
 
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('theme')
+    if (saved) return saved === 'dark'
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    }
+  }, [isDark])
+
   useEffect(() => {
     api.examples().then(setExamples).catch(() => {})
   }, [])
+
+  const toggleDark = () => setIsDark((d) => !d)
 
   const runAnalyze = async () => {
     setLoading(true)
@@ -68,7 +86,7 @@ export default function App() {
   const analysisValid = analysis && !analysis.stopped_after_validation
 
   return (
-    <div className="min-h-screen py-6 px-4">
+    <div className="min-h-screen py-6 px-4 bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
       <div className="max-w-5xl mx-auto space-y-4">
         <GrammarInputPanel
           grammarText={grammarText}
@@ -81,9 +99,11 @@ export default function App() {
           loading={loading}
           error={error}
           analysis={analysis}
+          isDark={isDark}
+          onToggleDark={toggleDark}
         />
 
-        <div className="bg-white rounded-xl shadow-sm">
+        <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xs border border-slate-200 dark:border-slate-800 transition-colors">
           <TabsNav active={tab} onChange={setTab} />
           <div className="p-4 sm:p-5">
             {tab === 'grammar' && <GrammarTab analysis={analysisValid ? analysis : null} />}
@@ -108,10 +128,11 @@ export default function App() {
           </div>
         </div>
 
-        <p className="text-center text-xs text-slate-400 pb-6">
-          Principles of Compiler Design — Innovative Assignment
+        <p className="text-center text-xs text-slate-400 dark:text-slate-500 pb-6">
+          Principles of Compiler Design — Interactive LL(1) Parsing Tool
         </p>
       </div>
     </div>
   )
 }
+
