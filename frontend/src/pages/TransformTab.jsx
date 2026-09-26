@@ -9,7 +9,7 @@ export default function TransformTab({ analysis }) {
   return (
     <div className="space-y-5">
       {!t.was_transformed && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-sm text-emerald-800">
+        <div className="bg-emerald-950/60 border border-emerald-800 rounded-xl p-4 text-sm text-emerald-200">
           Grammar required no transformation — it was already free of left recursion and common prefixes.
         </div>
       )}
@@ -26,7 +26,7 @@ export default function TransformTab({ analysis }) {
         <Section title="Left Factoring">
           {t.left_factoring_steps.map((s, i) => (
             <div key={i} className="mb-4">
-              <p className="text-xs text-slate-500 mb-1">Common prefix in productions of '{s.non_terminal}'</p>
+              <p className="text-xs text-slate-400 mb-1">Common prefix in productions of '{s.non_terminal}'</p>
               <div className="grid sm:grid-cols-2 gap-3">
                 <div>
                   <p className="text-xs uppercase text-slate-400 mb-1">Before</p>
@@ -37,18 +37,18 @@ export default function TransformTab({ analysis }) {
                   <CodeBlock>{s.after}</CodeBlock>
                 </div>
               </div>
-              <p className="text-xs text-slate-500 mt-1">{s.explanation}</p>
+              <p className="text-xs text-slate-400 mt-1">{s.explanation}</p>
             </div>
           ))}
         </Section>
       )}
 
-      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-indigo-900 mb-2 uppercase tracking-wide">
+      <div className="bg-indigo-950/60 border border-indigo-900/80 rounded-xl p-5 transition-colors">
+        <h3 className="text-sm font-semibold text-indigo-300 mb-2 uppercase tracking-wide">
           Final Grammar for LL(1) Analysis
         </h3>
-        <CodeBlock className="bg-white">{analysis.final_grammar.text}</CodeBlock>
-        <p className="text-xs text-indigo-800 mt-2">
+        <CodeBlock className="bg-[#090d16] border border-[#1e2d4a]">{analysis.final_grammar.text}</CodeBlock>
+        <p className="text-xs text-indigo-300 mt-2">
           ✓ Grammar transformation complete. FIRST and FOLLOW sets (see the FIRST / FOLLOW tabs) and the LL(1)
           parsing table are calculated from this transformed grammar.
         </p>
@@ -59,8 +59,8 @@ export default function TransformTab({ analysis }) {
 
 function Section({ title, children }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5">
-      <h3 className="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">{title}</h3>
+    <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-5 transition-colors">
+      <h3 className="text-sm font-semibold text-slate-200 mb-3 uppercase tracking-wide">{title}</h3>
       {children}
     </div>
   )
@@ -68,8 +68,8 @@ function Section({ title, children }) {
 
 function StepCard({ step }) {
   return (
-    <div className="mb-4 border-l-2 border-indigo-200 pl-3">
-      <p className="text-xs text-slate-500 mb-1">{step.explanation}</p>
+    <div className="mb-4 border-l-2 border-indigo-500 pl-3">
+      <p className="text-xs text-slate-400 mb-1">{step.explanation}</p>
       <div className="grid sm:grid-cols-2 gap-3">
         <div>
           <p className="text-xs uppercase text-slate-400 mb-1">Before</p>
@@ -83,3 +83,4 @@ function StepCard({ step }) {
     </div>
   )
 }
+

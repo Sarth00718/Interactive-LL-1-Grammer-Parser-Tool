@@ -8,44 +8,27 @@ export default function GrammarInputPanel({
   setStartSymbol,
   onAnalyze,
   examples,
+  selectedExampleId,
   onLoadExample,
   loading,
   error,
   analysis,
-  isDark,
-  onToggleDark,
 }) {
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xs p-5 transition-colors">
-      <div className="flex items-start justify-between flex-wrap gap-3 mb-3">
+    <div className="bg-slate-900/70 backdrop-blur-xl border border-slate-800/80 rounded-2xl shadow-2xl p-6">
+      <div className="flex items-start justify-between flex-wrap gap-4 mb-5">
         <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">Breaking Down Grammars</h1>
-            {/* Dark Theme Toggle Button */}
-            <button
-              onClick={onToggleDark}
-              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
-              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              {isDark ? (
-                <svg className="w-4 h-4 fill-amber-400" viewBox="0 0 20 20">
-                  <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" />
-                </svg>
-              ) : (
-                <svg className="w-4 h-4 fill-indigo-600" viewBox="0 0 20 20">
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
-              )}
-            </button>
-          </div>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Interactive LL(1) Grammar Analysis and Predictive Parsing Tool</p>
+          <h1 className="text-2xl font-extrabold text-white tracking-tight">
+            Breaking Down Grammars
+          </h1>
+          <p className="text-sm text-slate-400 mt-1 font-medium">Interactive LL(1) Grammar Analysis & Predictive Parsing Tool</p>
         </div>
 
         {analysis && !analysis.stopped_after_validation && (
           <StatusBadge
             ok={analysis.ll1?.is_ll1}
             okText="LL(1) Grammar"
-            badText={`Not LL(1) \u2014 ${analysis.ll1?.conflict_count} conflict(s)`}
+            badText={`Not LL(1) — ${analysis.ll1?.conflict_count} conflict(s)`}
           />
         )}
       </div>
@@ -55,40 +38,41 @@ export default function GrammarInputPanel({
         onChange={(e) => setGrammarText(e.target.value)}
         rows={7}
         spellCheck={false}
-        className="mono w-full text-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 placeholder:text-slate-400 dark:placeholder:text-slate-600 transition-colors"
+        className="mono w-full text-sm border border-slate-700/60 bg-[#090d14] text-slate-100 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all shadow-inner placeholder:text-slate-600 leading-relaxed"
         placeholder={"E -> T E'\nE' -> + T E' | epsilon\nT -> F T'\nT' -> * F T' | epsilon\nF -> ( E ) | id"}
       />
 
-      <div className="flex flex-wrap items-center gap-2 mt-3">
-        <label className="text-sm text-slate-600 dark:text-slate-300">Start symbol override:</label>
-        <input
-          value={startSymbol}
-          onChange={(e) => setStartSymbol(e.target.value)}
-          placeholder="(default: first non-terminal)"
-          className="mono text-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 rounded-md px-2 py-1 w-56 placeholder:text-slate-400 dark:placeholder:text-slate-600"
-        />
+      <div className="flex flex-wrap items-center gap-4 mt-5">
+        <div className="flex items-center gap-3">
+          <label className="text-sm text-slate-400 font-semibold">Start symbol</label>
+          <input
+            value={startSymbol}
+            onChange={(e) => setStartSymbol(e.target.value)}
+            placeholder="(default: first)"
+            className="mono text-sm border border-slate-700/60 bg-[#090d14] text-slate-100 rounded-lg px-3 py-2 w-32 sm:w-48 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+          />
+        </div>
 
         <button
           onClick={onAnalyze}
           disabled={loading}
-          className="ml-auto bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:opacity-50 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+          className="ml-auto bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 disabled:opacity-50 text-white text-sm font-bold px-6 py-2.5 rounded-lg transition-all shadow-lg shadow-indigo-900/20"
         >
-          {loading ? 'Analyzing\u2026' : 'Analyze'}
+          {loading ? 'Analyzing…' : 'Analyze Grammar'}
         </button>
 
         <select
+          value={selectedExampleId || ''}
           onChange={(e) => {
             if (e.target.value) onLoadExample(e.target.value)
-            e.target.value = ''
           }}
-          defaultValue=""
-          className="text-sm border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 outline-none"
+          className="text-sm border border-slate-700/60 rounded-lg px-4 py-2.5 bg-[#090d14] text-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/50 font-medium transition-all cursor-pointer hover:bg-slate-800/50"
         >
-          <option value="" disabled>
-            Load example…
+          <option value="" disabled className="bg-slate-900 text-slate-400">
+            Custom / Select Example…
           </option>
           {examples.map((ex) => (
-            <option key={ex.id} value={ex.id}>
+            <option key={ex.id} value={ex.id} className="bg-slate-900 text-slate-200">
               {ex.title}
             </option>
           ))}
@@ -96,16 +80,22 @@ export default function GrammarInputPanel({
       </div>
 
       {error && (
-        <div className="mt-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-200 rounded-lg p-3 text-sm">
-          <p className="font-semibold">Grammar Error</p>
-          <p className="mt-1">{error.error || error.message}</p>
+        <div className="mt-5 bg-rose-950/40 border border-rose-900/50 text-rose-200 rounded-xl p-4 text-sm backdrop-blur-sm">
+          <p className="font-bold text-rose-300 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Grammar Error
+          </p>
+          <p className="mt-1.5">{error.error || error.message}</p>
           {error.production && (
-            <p className="mono mt-1 text-rose-700 dark:text-rose-300">Production: {error.production}</p>
+            <p className="mono mt-2 text-rose-300/80 bg-rose-950/50 inline-block px-2 py-1 rounded">Production: {error.production}</p>
           )}
-          {error.hint && <p className="mt-1 text-rose-600 dark:text-rose-400">{error.hint}</p>}
+          {error.hint && <p className="mt-2 text-rose-400/80">{error.hint}</p>}
         </div>
       )}
     </div>
   )
 }
+
 

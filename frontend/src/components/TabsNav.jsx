@@ -6,8 +6,8 @@ const TABS = [
   { id: 'transform', label: 'Transform' },
   { id: 'first', label: 'FIRST' },
   { id: 'follow', label: 'FOLLOW' },
-  { id: 'll1', label: 'LL(1)' },
   { id: 'table', label: 'Parsing Table' },
+  { id: 'll1', label: 'LL(1)' },
   { id: 'parser', label: 'Parser' },
   { id: 'tree', label: 'Parse Tree' },
   { id: 'learn', label: 'Learn' },
@@ -15,16 +15,16 @@ const TABS = [
 
 export default function TabsNav({ active, onChange }) {
   return (
-    <div className="flex gap-1 overflow-x-auto border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-t-xl px-2">
+    <div className="flex gap-2 overflow-x-auto border-b border-slate-800/80 bg-slate-900/40 px-3 pt-3">
       {TABS.map((t) => (
         <button
           key={t.id}
           onClick={() => onChange(t.id)}
           className={
-            'whitespace-nowrap px-3.5 py-2.5 text-sm font-medium border-b-2 transition-colors ' +
+            'whitespace-nowrap px-4 py-2.5 text-sm font-semibold rounded-t-lg transition-all ' +
             (active === t.id
-              ? 'border-indigo-600 dark:border-indigo-400 text-indigo-700 dark:text-indigo-400 font-semibold'
-              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200')
+              ? 'bg-indigo-500/10 text-indigo-400 border-b-2 border-indigo-500'
+              : 'text-slate-400 border-b-2 border-transparent hover:text-slate-200 hover:bg-slate-800/40')
           }
         >
           {t.label}
@@ -33,4 +33,5 @@ export default function TabsNav({ active, onChange }) {
     </div>
   )
 }
+
 

@@ -192,8 +192,7 @@ export default function ParseTreeView({ tree }) {
     const ctx = canvas.getContext('2d')
     ctx.scale(2, 2)
 
-    const isDark = document.documentElement.classList.contains('dark')
-    ctx.fillStyle = isDark ? '#0f172a' : '#ffffff'
+    ctx.fillStyle = '#ffffff'
     ctx.fillRect(0, 0, width, height)
 
     // Render node boxes onto canvas
@@ -208,9 +207,7 @@ export default function ParseTreeView({ tree }) {
 
       // Draw HTML nodes on top of canvas
       layoutData.allNodes.forEach((node) => {
-        ctx.fillStyle = node.is_terminal
-          ? isDark ? '#78350f' : '#fef3c7'
-          : isDark ? '#1e1b4b' : '#e0e7ff'
+        ctx.fillStyle = node.is_terminal ? '#fef3c7' : '#e0e7ff'
         ctx.strokeStyle = node.is_terminal ? '#f59e0b' : '#6366f1'
         ctx.lineWidth = 1.5
 
@@ -224,9 +221,7 @@ export default function ParseTreeView({ tree }) {
         ctx.fill()
         ctx.stroke()
 
-        ctx.fillStyle = node.is_terminal
-          ? isDark ? '#fde68a' : '#92400e'
-          : isDark ? '#c7d2fe' : '#3730a3'
+        ctx.fillStyle = node.is_terminal ? '#92400e' : '#3730a3'
         ctx.font = 'bold 12px monospace'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
@@ -254,31 +249,31 @@ export default function ParseTreeView({ tree }) {
   return (
     <div className="space-y-3">
       {/* Control Bar */}
-      <div className="control-bar flex flex-wrap items-center justify-between gap-3 bg-slate-100/90 dark:bg-slate-900/90 p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-xs transition-colors">
+      <div className="control-bar flex flex-wrap items-center justify-between gap-3 bg-[#090d16] p-3 rounded-lg border border-[#1e2d4a] text-xs">
         {/* Stats */}
-        <div className="flex items-center gap-2 font-medium text-slate-600 dark:text-slate-300">
-          <span className="inline-flex items-center gap-1 bg-white dark:bg-slate-800 px-2 py-1 rounded border border-slate-200 dark:border-slate-700 shadow-2xs">
-            <span className="text-slate-400 dark:text-slate-500">Nodes:</span>
-            <strong className="text-slate-700 dark:text-slate-200">{layoutData.totalNodes}</strong>
+        <div className="flex items-center gap-2 font-medium text-slate-300">
+          <span className="inline-flex items-center gap-1 bg-[#131d33] px-2.5 py-1 rounded border border-[#1e2d4a]">
+            <span className="text-slate-400">Nodes:</span>
+            <strong className="text-slate-100">{layoutData.totalNodes}</strong>
           </span>
-          <span className="inline-flex items-center gap-1 bg-white dark:bg-slate-800 px-2 py-1 rounded border border-slate-200 dark:border-slate-700 shadow-2xs">
-            <span className="text-slate-400 dark:text-slate-500">Depth:</span>
-            <strong className="text-slate-700 dark:text-slate-200">{layoutData.maxDepth}</strong>
+          <span className="inline-flex items-center gap-1 bg-[#131d33] px-2.5 py-1 rounded border border-[#1e2d4a]">
+            <span className="text-slate-400">Depth:</span>
+            <strong className="text-slate-100">{layoutData.maxDepth}</strong>
           </span>
-          <span className="hidden sm:inline-flex items-center gap-1 bg-white dark:bg-slate-800 px-2 py-1 rounded border border-slate-200 dark:border-slate-700 shadow-2xs">
-            <span className="text-indigo-600 dark:text-indigo-400 font-bold">Non-terminals:</span>
-            <strong className="text-slate-700 dark:text-slate-200">{layoutData.nonTerminalCount}</strong>
+          <span className="hidden sm:inline-flex items-center gap-1 bg-[#131d33] px-2.5 py-1 rounded border border-[#1e2d4a]">
+            <span className="text-indigo-400 font-bold">Non-terminals:</span>
+            <strong className="text-slate-100">{layoutData.nonTerminalCount}</strong>
           </span>
-          <span className="hidden sm:inline-flex items-center gap-1 bg-white dark:bg-slate-800 px-2 py-1 rounded border border-slate-200 dark:border-slate-700 shadow-2xs">
-            <span className="text-amber-600 dark:text-amber-400 font-bold">Terminals / ε:</span>
-            <strong className="text-slate-700 dark:text-slate-200">{layoutData.terminalCount}</strong>
+          <span className="hidden sm:inline-flex items-center gap-1 bg-[#131d33] px-2.5 py-1 rounded border border-[#1e2d4a]">
+            <span className="text-amber-400 font-bold">Terminals / ε:</span>
+            <strong className="text-slate-100">{layoutData.terminalCount}</strong>
           </span>
         </div>
 
         {/* Display Options */}
         <div className="flex items-center gap-2 flex-wrap">
           {/* Connector style */}
-          <div className="flex bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 p-0.5 shadow-2xs">
+          <div className="flex bg-[#131d33] rounded border border-[#1e2d4a] p-0.5">
             {['orthogonal', 'curved', 'straight'].map((style) => (
               <button
                 key={style}
@@ -286,8 +281,8 @@ export default function ParseTreeView({ tree }) {
                 className={
                   'px-2 py-0.5 rounded text-xs capitalize transition-colors ' +
                   (lineStyle === style
-                    ? 'bg-indigo-600 text-white font-medium dark:bg-indigo-500'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200')
+                    ? 'bg-indigo-600 text-white font-medium'
+                    : 'text-slate-400 hover:text-slate-200')
                 }
               >
                 {style}
@@ -299,35 +294,35 @@ export default function ParseTreeView({ tree }) {
           <select
             value={density}
             onChange={(e) => setDensity(e.target.value)}
-            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 px-2 py-1 rounded text-xs shadow-2xs outline-none"
+            className="bg-[#131d33] border border-[#1e2d4a] text-slate-200 px-2 py-1 rounded text-xs outline-none"
           >
-            <option value="compact">Compact</option>
-            <option value="normal">Normal</option>
-            <option value="spacious">Spacious</option>
+            <option value="compact" className="bg-slate-900 text-slate-200">Compact</option>
+            <option value="normal" className="bg-slate-900 text-slate-200">Normal</option>
+            <option value="spacious" className="bg-slate-900 text-slate-200">Spacious</option>
           </select>
 
           {/* Zoom & Pan Controls */}
-          <div className="flex items-center gap-1 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 p-0.5 shadow-2xs">
+          <div className="flex items-center gap-1 bg-[#131d33] rounded border border-[#1e2d4a] p-0.5">
             <button
               onClick={() => setZoom((z) => Math.max(0.4, +(z - 0.15).toFixed(2)))}
-              className="px-2 py-0.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded font-bold"
+              className="px-2 py-0.5 text-slate-300 hover:bg-slate-800 rounded font-bold"
               title="Zoom out"
             >
               -
             </button>
-            <span className="w-10 text-center text-slate-700 dark:text-slate-300 font-mono text-xs">
+            <span className="w-10 text-center text-indigo-300 font-mono text-xs">
               {Math.round(zoom * 100)}%
             </span>
             <button
               onClick={() => setZoom((z) => Math.min(2.5, +(z + 0.15).toFixed(2)))}
-              className="px-2 py-0.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded font-bold"
+              className="px-2 py-0.5 text-slate-300 hover:bg-slate-800 rounded font-bold"
               title="Zoom in"
             >
               +
             </button>
             <button
               onClick={handleCenterView}
-              className="px-1.5 py-0.5 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded text-xs font-medium border-l border-slate-200 dark:border-slate-700"
+              className="px-1.5 py-0.5 text-indigo-400 hover:bg-indigo-950/80 rounded text-xs font-medium border-l border-[#1e2d4a]"
               title="Reset Zoom & Pan"
             >
               Reset
@@ -340,8 +335,8 @@ export default function ParseTreeView({ tree }) {
             className={
               'px-2 py-1 rounded text-xs border transition-colors ' +
               (showMinimap
-                ? 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-300 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 font-medium'
-                : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400')
+                ? 'bg-indigo-950/80 border-indigo-500/60 text-indigo-300 font-medium'
+                : 'bg-[#131d33] border-[#1e2d4a] text-slate-400 hover:text-slate-200')
             }
             title="Toggle Minimap"
           >
@@ -351,7 +346,7 @@ export default function ParseTreeView({ tree }) {
           {/* PNG Export */}
           <button
             onClick={handleExportPNG}
-            className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white px-2.5 py-1 rounded text-xs font-medium transition shadow-2xs flex items-center gap-1"
+            className="bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded text-xs font-medium transition shadow-md flex items-center gap-1"
             title="Export parse tree as PNG image"
           >
             📷 Export Image
@@ -367,7 +362,7 @@ export default function ParseTreeView({ tree }) {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
         className={
-          'overflow-hidden relative max-h-[640px] h-[520px] bg-slate-900/5 dark:bg-slate-950/60 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] rounded-xl border border-slate-200 dark:border-slate-800 flex justify-center items-start transition-colors select-none ' +
+          'overflow-hidden relative max-h-[640px] h-[520px] bg-[#060a12] bg-[radial-gradient(#1e2d4a_1px,transparent_1px)] [background-size:16px_16px] rounded-xl border border-[#1e2d4a] flex justify-center items-start transition-colors select-none ' +
           (isDragging ? 'cursor-grabbing' : 'cursor-grab')
         }
       >
@@ -400,13 +395,13 @@ export default function ParseTreeView({ tree }) {
                   fill="none"
                   stroke={
                     isHighlighted
-                      ? '#6366f1'
+                      ? '#818cf8'
                       : hasActiveHighlight
-                      ? '#475569'
-                      : '#94a3b8'
+                      ? '#334155'
+                      : '#475569'
                   }
                   strokeWidth={isHighlighted ? 2.5 : 1.5}
-                  className="transition-all duration-150 dark:opacity-90"
+                  className="transition-all duration-150"
                 />
               )
             })}
@@ -436,11 +431,11 @@ export default function ParseTreeView({ tree }) {
               >
                 <div
                   className={
-                    'mono text-xs px-3 py-1 rounded-lg border shadow-xs transition-colors whitespace-nowrap flex items-center gap-1 ' +
+                    'mono text-xs px-3 py-1 rounded-lg border shadow-lg transition-colors whitespace-nowrap flex items-center gap-1 ' +
                     (node.is_terminal
-                      ? 'bg-amber-50 dark:bg-amber-950/80 border-amber-300 dark:border-amber-600 text-amber-900 dark:text-amber-200 font-bold hover:bg-amber-100 dark:hover:bg-amber-900/90'
-                      : 'bg-indigo-50 dark:bg-indigo-950/80 border-indigo-300 dark:border-indigo-600 text-indigo-900 dark:text-indigo-200 font-semibold hover:bg-indigo-100 dark:hover:bg-indigo-900/90') +
-                    (isHighlighted ? ' ring-2 ring-indigo-500/60 shadow-md' : '')
+                      ? 'bg-amber-950/80 border-amber-500/60 text-amber-300 font-bold hover:bg-amber-900/90 shadow-amber-950'
+                      : 'bg-indigo-950/80 border-indigo-500/60 text-indigo-200 font-semibold hover:bg-indigo-900/90 shadow-indigo-950') +
+                    (isHighlighted ? ' ring-2 ring-indigo-400 shadow-indigo-900' : '')
                   }
                 >
                   {node.symbol}
@@ -452,10 +447,10 @@ export default function ParseTreeView({ tree }) {
 
         {/* Interactive Minimap Overlay */}
         {showMinimap && (
-          <div className="absolute bottom-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xs border border-slate-300 dark:border-slate-700 rounded-lg p-2 shadow-md z-30 pointer-events-auto">
-            <div className="flex items-center justify-between mb-1 text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <div className="absolute bottom-3 right-3 bg-[#0f172a]/95 backdrop-blur-md border border-[#1e2d4a] rounded-lg p-2 shadow-2xl z-30 pointer-events-auto">
+            <div className="flex items-center justify-between mb-1 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
               <span>Minimap</span>
-              <span className="font-mono text-[9px]">{Math.round(zoom * 100)}%</span>
+              <span className="font-mono text-[9px] text-indigo-400">{Math.round(zoom * 100)}%</span>
             </div>
             <div
               onClick={(e) => {
@@ -470,7 +465,7 @@ export default function ParseTreeView({ tree }) {
                 })
               }}
               style={{ width: miniWidth, height: miniHeight }}
-              className="relative bg-slate-100 dark:bg-slate-950 rounded border border-slate-200 dark:border-slate-800 overflow-hidden cursor-crosshair"
+              className="relative bg-[#080c14] rounded border border-[#1e2d4a] overflow-hidden cursor-crosshair"
             >
               {/* Mini nodes */}
               {layoutData.allNodes.map((node) => (
@@ -483,7 +478,7 @@ export default function ParseTreeView({ tree }) {
                   }}
                   className={
                     'absolute w-1.5 h-1.5 rounded-full ' +
-                    (node.is_terminal ? 'bg-amber-500' : 'bg-indigo-500')
+                    (node.is_terminal ? 'bg-amber-400' : 'bg-indigo-400')
                   }
                 />
               ))}
@@ -496,7 +491,7 @@ export default function ParseTreeView({ tree }) {
                   left: Math.max(0, Math.min(miniWidth - 30, (miniWidth / 2) - (pan.x / zoom) * miniScale)),
                   top: Math.max(0, Math.min(miniHeight - 20, -(pan.y / zoom) * miniScale))
                 }}
-                className="absolute border-2 border-indigo-500/80 bg-indigo-500/10 rounded-xs pointer-events-none transition-all duration-75"
+                className="absolute border-2 border-indigo-500/90 bg-indigo-500/20 rounded-xs pointer-events-none transition-all duration-75"
               />
             </div>
           </div>
@@ -505,5 +500,6 @@ export default function ParseTreeView({ tree }) {
     </div>
   )
 }
+
 
 

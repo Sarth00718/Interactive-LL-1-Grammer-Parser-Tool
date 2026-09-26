@@ -41,8 +41,8 @@ export default function GrammarTab({ analysis }) {
 
 function Section({ title, children }) {
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 transition-colors">
-      <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wide">{title}</h3>
+    <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-5 transition-colors">
+      <h3 className="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wide">{title}</h3>
       {children}
     </div>
   )
@@ -50,17 +50,17 @@ function Section({ title, children }) {
 
 function Field({ label, value }) {
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 transition-colors">
-      <p className="text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1">{label}</p>
-      <p className="mono text-sm text-slate-800 dark:text-slate-200 break-words">{value}</p>
+    <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-4 transition-colors">
+      <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">{label}</p>
+      <p className="mono text-sm text-indigo-300 font-semibold break-words">{value}</p>
     </div>
   )
 }
 
 export function Empty() {
   return (
-    <div className="bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-800 rounded-xl p-10 text-center text-slate-400 dark:text-slate-500 text-sm transition-colors">
-      Enter a grammar above and click <span className="font-medium text-slate-600 dark:text-slate-300">Analyze</span> to get started.
+    <div className="bg-[#090d16] border border-dashed border-[#1e2d4a] rounded-xl p-10 text-center text-slate-400 text-sm transition-colors">
+      Enter a grammar above and click <span className="font-semibold text-indigo-400">Analyze</span> to get started.
     </div>
   )
 }

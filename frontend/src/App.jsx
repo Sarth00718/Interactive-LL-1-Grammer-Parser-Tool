@@ -18,6 +18,7 @@ const DEFAULT_GRAMMAR = "E -> T E'\nE' -> + T E' | epsilon\nT -> F T'\nT' -> * F
 export default function App() {
   const [grammarText, setGrammarText] = useState(DEFAULT_GRAMMAR)
   const [startSymbol, setStartSymbol] = useState('')
+  const [selectedExampleId, setSelectedExampleId] = useState('arithmetic-ll1')
   const [analysis, setAnalysis] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -26,27 +27,19 @@ export default function App() {
   const [sampleInput, setSampleInput] = useState('id + id * id')
   const [parseResult, setParseResult] = useState(null)
 
-  const [isDark, setIsDark] = useState(() => {
-    const saved = localStorage.getItem('theme')
-    if (saved) return saved === 'dark'
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-  })
-
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark')
-      localStorage.setItem('theme', 'dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-      localStorage.setItem('theme', 'light')
-    }
-  }, [isDark])
-
-  useEffect(() => {
+    document.documentElement.classList.add('dark')
     api.examples().then(setExamples).catch(() => {})
   }, [])
 
-  const toggleDark = () => setIsDark((d) => !d)
+  const handleGrammarTextChange = (text) => {
+    setGrammarText(text)
+    const normalizedInput = text.replace(/\r\n/g, '\n').trim()
+    const matchingEx = examples.find(
+      (e) => e.grammar_text.replace(/\r\n/g, '\n').trim() === normalizedInput
+    )
+    setSelectedExampleId(matchingEx ? matchingEx.id : '')
+  }
 
   const runAnalyze = async () => {
     setLoading(true)
@@ -75,6 +68,7 @@ export default function App() {
   const loadExample = (id) => {
     const ex = examples.find((e) => e.id === id)
     if (!ex) return
+    setSelectedExampleId(id)
     setGrammarText(ex.grammar_text)
     setStartSymbol('')
     setSampleInput(ex.sample_input || '')
@@ -86,26 +80,26 @@ export default function App() {
   const analysisValid = analysis && !analysis.stopped_after_validation
 
   return (
-    <div className="min-h-screen py-6 px-4 bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-      <div className="max-w-5xl mx-auto space-y-4">
+    <div className="min-h-screen py-8 px-4 bg-[#030712] text-slate-200 selection:bg-indigo-500/30 selection:text-indigo-200 font-sans relative">
+      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-indigo-900/10 via-[#030712]/50 to-transparent pointer-events-none"></div>
+      <div className="max-w-6xl mx-auto space-y-6 relative z-10">
         <GrammarInputPanel
           grammarText={grammarText}
-          setGrammarText={setGrammarText}
+          setGrammarText={handleGrammarTextChange}
           startSymbol={startSymbol}
           setStartSymbol={setStartSymbol}
           onAnalyze={runAnalyze}
           examples={examples}
+          selectedExampleId={selectedExampleId}
           onLoadExample={loadExample}
           loading={loading}
           error={error}
           analysis={analysis}
-          isDark={isDark}
-          onToggleDark={toggleDark}
         />
 
-        <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xs border border-slate-200 dark:border-slate-800 transition-colors">
+        <div className="bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-800/80 overflow-hidden">
           <TabsNav active={tab} onChange={setTab} />
-          <div className="p-4 sm:p-5">
+          <div className="p-5 sm:p-7">
             {tab === 'grammar' && <GrammarTab analysis={analysisValid ? analysis : null} />}
             {tab === 'diagnostics' && <DiagnosticsTab analysis={analysisValid ? analysis : null} />}
             {tab === 'transform' && <TransformTab analysis={analysisValid ? analysis : null} />}
@@ -128,11 +122,13 @@ export default function App() {
           </div>
         </div>
 
-        <p className="text-center text-xs text-slate-400 dark:text-slate-500 pb-6">
+        <p className="text-center text-sm font-medium text-slate-500 pb-8 pt-4">
           Principles of Compiler Design — Interactive LL(1) Parsing Tool
         </p>
       </div>
     </div>
   )
 }
+
+
 

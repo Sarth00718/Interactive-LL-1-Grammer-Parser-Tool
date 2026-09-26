@@ -87,25 +87,36 @@ const VIVA = [
 export default function LearnTab() {
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-slate-200 rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Core Concepts</h3>
+      <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-5 transition-colors">
+        <h3 className="text-sm font-bold text-slate-200 mb-3 uppercase tracking-wide">
+          Core Concepts
+        </h3>
         <div className="grid sm:grid-cols-2 gap-4">
           {TOPICS.map((t) => (
-            <div key={t.term} className="border-l-2 border-indigo-200 pl-3">
-              <p className="text-sm font-semibold text-slate-800">{t.term}</p>
-              <p className="text-xs text-slate-500 mt-0.5">{t.body}</p>
+            <div key={t.term} className="border-l-2 border-indigo-500 pl-3">
+              <p className="text-sm font-semibold text-indigo-300">{t.term}</p>
+              <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{t.body}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200 rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-slate-700 mb-3 uppercase tracking-wide">Viva Preparation</h3>
+      <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-5 transition-colors">
+        <h3 className="text-sm font-bold text-slate-200 mb-3 uppercase tracking-wide">
+          Viva Preparation & Q&A
+        </h3>
         <div className="space-y-3">
           {VIVA.map(([q, a], i) => (
-            <details key={i} className="border border-slate-200 rounded-lg px-3 py-2">
-              <summary className="text-sm font-medium text-slate-800 cursor-pointer">{q}</summary>
-              <p className="text-xs text-slate-500 mt-1.5">{a}</p>
+            <details
+              key={i}
+              className="border border-[#1e2d4a] bg-[#090d16] hover:bg-[#111a2e] rounded-lg px-3.5 py-2.5 transition-colors group"
+            >
+              <summary className="text-sm font-semibold text-slate-200 cursor-pointer outline-none group-hover:text-indigo-300">
+                {q}
+              </summary>
+              <p className="text-xs text-slate-300 mt-2 leading-relaxed pl-2 border-l border-indigo-500/60">
+                {a}
+              </p>
             </details>
           ))}
         </div>
@@ -113,3 +124,4 @@ export default function LearnTab() {
     </div>
   )
 }
+
