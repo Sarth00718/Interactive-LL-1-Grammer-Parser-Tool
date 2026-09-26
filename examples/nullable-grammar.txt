@@ -1,0 +1,8 @@
+# Nullable Grammar
+# Both A and B can derive epsilon, useful for exercising FOLLOW propagation rules.
+
+S -> A B
+A -> a | epsilon
+B -> b | epsilon
+
+# sample input: a b

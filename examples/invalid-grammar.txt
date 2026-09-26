@@ -1,0 +1,5 @@
+# Malformed Grammar (for validation demo)
+# Deliberately broken: a production with a missing right-hand side.
+
+S -> A
+A ->

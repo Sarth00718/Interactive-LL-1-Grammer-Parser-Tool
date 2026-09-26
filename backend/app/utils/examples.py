@@ -1,0 +1,58 @@
+EXAMPLES = [
+    {
+        "id": "arithmetic-ll1",
+        "title": "Arithmetic Expression Grammar (already LL(1))",
+        "description": "Classic expression grammar, already free of left recursion and left factoring issues.",
+        "grammar_text": "E -> T E'\nE' -> + T E' | epsilon\nT -> F T'\nT' -> * F T' | epsilon\nF -> ( E ) | id",
+        "sample_input": "id + id * id",
+    },
+    {
+        "id": "left-recursive-arithmetic",
+        "title": "Left-Recursive Arithmetic Grammar",
+        "description": "The 'natural' way to write expression grammar; contains direct left recursion.",
+        "grammar_text": "E -> E + T | T\nT -> T * F | F\nF -> ( E ) | id",
+        "sample_input": "id + id * id",
+    },
+    {
+        "id": "first-first-conflict",
+        "title": "FIRST/FIRST Conflict Grammar",
+        "description": "S -> A | B, where A and B both derive the same terminal -- a genuine conflict that transformation cannot remove (unlike a shared literal prefix, which left factoring would fix).",
+        "grammar_text": "S -> A | B\nA -> a\nB -> a",
+        "sample_input": "a",
+    },
+    {
+        "id": "shared-prefix-not-a-real-conflict",
+        "title": "Shared-Prefix Grammar (resolved by left factoring)",
+        "description": "S -> a A | a B looks like a FIRST/FIRST conflict on the original grammar, but left factoring resolves it -- compare the 'Original Grammar Analysis' diagnostics tab against the final LL(1) table.",
+        "grammar_text": "S -> a A | a B\nA -> c\nB -> d",
+        "sample_input": "a c",
+    },
+    {
+        "id": "left-factoring-if-else",
+        "title": "Dangling-Else Style Left Factoring Grammar",
+        "description": "Two alternatives share a long common prefix, requiring left factoring.",
+        "grammar_text": "S -> if E then S else S | if E then S\nE -> id",
+        "sample_input": "if id then if id then id else id",
+    },
+    {
+        "id": "nullable-grammar",
+        "title": "Nullable Grammar",
+        "description": "Both A and B can derive epsilon, useful for exercising FOLLOW propagation rules.",
+        "grammar_text": "S -> A B\nA -> a | epsilon\nB -> b | epsilon",
+        "sample_input": "a b",
+    },
+    {
+        "id": "indirect-left-recursion",
+        "title": "Indirect Left Recursion Grammar",
+        "description": "A -> B -> A forms an indirect left-recursion cycle.",
+        "grammar_text": "A -> B a | c\nB -> A b | d",
+        "sample_input": "c a",
+    },
+    {
+        "id": "invalid-grammar",
+        "title": "Malformed Grammar (for validation demo)",
+        "description": "Deliberately broken: a production with a missing right-hand side.",
+        "grammar_text": "S -> A\nA ->",
+        "sample_input": "",
+    },
+]

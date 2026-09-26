@@ -1,0 +1,8 @@
+# Left-Recursive Arithmetic Grammar
+# The 'natural' way to write expression grammar; contains direct left recursion.
+
+E -> E + T | T
+T -> T * F | F
+F -> ( E ) | id
+
+# sample input: id + id * id

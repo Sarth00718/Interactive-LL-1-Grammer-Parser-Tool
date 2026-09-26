@@ -1,0 +1,7 @@
+# Indirect Left Recursion Grammar
+# A -> B -> A forms an indirect left-recursion cycle.
+
+A -> B a | c
+B -> A b | d
+
+# sample input: c a

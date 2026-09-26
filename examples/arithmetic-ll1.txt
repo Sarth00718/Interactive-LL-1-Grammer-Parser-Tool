@@ -1,0 +1,10 @@
+# Arithmetic Expression Grammar (already LL(1))
+# Classic expression grammar, already free of left recursion and left factoring issues.
+
+E -> T E'
+E' -> + T E' | epsilon
+T -> F T'
+T' -> * F T' | epsilon
+F -> ( E ) | id
+
+# sample input: id + id * id

@@ -1,0 +1,8 @@
+# Shared-Prefix Grammar (resolved by left factoring)
+# S -> a A | a B looks like a FIRST/FIRST conflict on the original grammar, but left factoring resolves it -- compare the 'Original Grammar Analysis' diagnostics tab against the final LL(1) table.
+
+S -> a A | a B
+A -> c
+B -> d
+
+# sample input: a c

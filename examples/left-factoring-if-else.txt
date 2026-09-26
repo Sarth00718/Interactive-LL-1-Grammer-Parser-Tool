@@ -1,0 +1,7 @@
+# Dangling-Else Style Left Factoring Grammar
+# Two alternatives share a long common prefix, requiring left factoring.
+
+S -> if E then S else S | if E then S
+E -> id
+
+# sample input: if id then if id then id else id

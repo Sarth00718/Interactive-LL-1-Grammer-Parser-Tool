@@ -1,0 +1,8 @@
+# FIRST/FIRST Conflict Grammar
+# S -> A | B, where A and B both derive the same terminal -- a genuine conflict that transformation cannot remove (unlike a shared literal prefix, which left factoring would fix).
+
+S -> A | B
+A -> a
+B -> a
+
+# sample input: a
