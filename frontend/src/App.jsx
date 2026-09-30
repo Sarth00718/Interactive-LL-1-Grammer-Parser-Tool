@@ -28,7 +28,7 @@ export default function App() {
   const [parseResult, setParseResult] = useState(null)
 
   useEffect(() => {
-    document.documentElement.classList.add('dark')
+    document.documentElement.classList.remove('dark')
     api.examples().then(setExamples).catch(() => {})
   }, [])
 
@@ -80,8 +80,8 @@ export default function App() {
   const analysisValid = analysis && !analysis.stopped_after_validation
 
   return (
-    <div className="min-h-screen py-8 px-4 bg-[#030712] text-slate-200 selection:bg-indigo-500/30 selection:text-indigo-200 font-sans relative">
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-indigo-900/10 via-[#030712]/50 to-transparent pointer-events-none"></div>
+    <div className="min-h-screen py-8 px-4 bg-gray-50 text-gray-800 selection:bg-indigo-200 selection:text-indigo-900 font-sans relative">
+      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-indigo-100/50 via-gray-50/50 to-transparent pointer-events-none"></div>
       <div className="max-w-6xl mx-auto space-y-6 relative z-10">
         <GrammarInputPanel
           grammarText={grammarText}
@@ -97,7 +97,7 @@ export default function App() {
           analysis={analysis}
         />
 
-        <div className="bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-800/80 overflow-hidden">
+        <div className="bg-white backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
           <TabsNav active={tab} onChange={setTab} />
           <div className="p-5 sm:p-7">
             {tab === 'grammar' && <GrammarTab analysis={analysisValid ? analysis : null} />}
@@ -122,7 +122,7 @@ export default function App() {
           </div>
         </div>
 
-        <p className="text-center text-sm font-medium text-slate-500 pb-8 pt-4">
+        <p className="text-center text-sm font-medium text-gray-500 pb-8 pt-4">
           Principles of Compiler Design — Interactive LL(1) Parsing Tool
         </p>
       </div>

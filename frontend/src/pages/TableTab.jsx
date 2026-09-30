@@ -20,12 +20,12 @@ export default function TableTab({ analysis }) {
   return (
     <div className="space-y-5">
       {/* FIRST & FOLLOW Quick Reference Panel */}
-      <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-5 shadow-xl">
+      <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xl">
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-          <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wide">
+          <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wide">
             FIRST & FOLLOW Sets Reference
           </h3>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-gray-600">
             Parsing table entries M[A, a] depend directly on these sets
           </span>
         </div>
@@ -34,19 +34,19 @@ export default function TableTab({ analysis }) {
           {nonTerminals.map((nt) => (
             <div
               key={nt}
-              className="flex items-center justify-between p-2.5 rounded-lg border border-[#1e2d4a] bg-[#090d16] text-xs"
+              className="flex items-center justify-between p-2.5 rounded-lg border border-gray-200 bg-gray-50 text-xs"
             >
-              <span className="mono font-bold text-indigo-400 w-10 text-sm">{nt}</span>
+              <span className="mono font-bold text-indigo-700 w-10 text-sm">{nt}</span>
               <div className="flex-1 flex flex-wrap items-center gap-3">
                 <div className="flex items-center gap-1">
-                  <span className="text-slate-400 font-medium">FIRST:</span>
-                  <span className="mono font-bold text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/80">
+                  <span className="text-gray-600 font-medium">FIRST:</span>
+                  <span className="mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-300">
                     {'{' + (firstSets[nt] || []).join(', ') + '}'}
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="text-slate-400 font-medium">FOLLOW:</span>
-                  <span className="mono font-bold text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/80">
+                  <span className="text-gray-600 font-medium">FOLLOW:</span>
+                  <span className="mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-300">
                     {'{' + (followSets[nt] || []).join(', ') + '}'}
                   </span>
                 </div>
@@ -57,12 +57,12 @@ export default function TableTab({ analysis }) {
       </div>
 
       {/* LL(1) Parsing Table */}
-      <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-5 scroll-x shadow-xl">
+      <div className="bg-white border border-gray-200 rounded-xl p-5 scroll-x shadow-xl">
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-          <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wide">
+          <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wide">
             LL(1) Parsing Table
           </h3>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-gray-600">
             Click any populated cell to see why that production was placed there
           </p>
         </div>
@@ -70,13 +70,13 @@ export default function TableTab({ analysis }) {
         <table className="mono text-xs border-collapse w-full">
           <thead>
             <tr>
-              <th className="border border-[#1e2d4a] bg-[#18243c] text-indigo-300 font-bold px-3 py-2.5 sticky left-0 z-10 shadow-md">
+              <th className="border border-gray-300 bg-indigo-100 text-indigo-900 font-bold px-3 py-2.5 sticky left-0 z-10 shadow-md">
                 M[A, a]
               </th>
               {pt.columns.map((col) => (
                 <th
                   key={col}
-                  className="border border-[#1e2d4a] bg-[#131d33] text-indigo-300 font-bold px-3 py-2.5 min-w-[120px]"
+                  className="border border-gray-300 bg-indigo-50 text-indigo-900 font-bold px-3 py-2.5 min-w-[120px]"
                 >
                   {col}
                 </th>
@@ -86,7 +86,7 @@ export default function TableTab({ analysis }) {
           <tbody>
             {nonTerminals.map((nt) => (
               <tr key={nt}>
-                <td className="border border-[#1e2d4a] bg-[#162036] text-indigo-300 font-bold px-3 py-2.5 sticky left-0 z-10 shadow-md">
+                <td className="border border-gray-300 bg-indigo-50 text-indigo-900 font-bold px-3 py-2.5 sticky left-0 z-10 shadow-md">
                   {nt}
                 </td>
                 {pt.columns.map((col) => {
@@ -98,12 +98,12 @@ export default function TableTab({ analysis }) {
                       key={col}
                       onClick={() => entries.length > 0 && setSelected({ nt, col })}
                       className={
-                        'border border-[#1e2d4a] px-3 py-2.5 align-top transition-colors ' +
+                        'border border-gray-300 px-3 py-2.5 align-top transition-colors ' +
                         (entries.length > 0
-                          ? 'cursor-pointer hover:bg-indigo-950/80 bg-[#0c1322] '
-                          : 'bg-[#060a12] ') +
-                        (isConflict ? 'bg-rose-950/90 text-rose-200 ' : '') +
-                        (isSel ? 'ring-2 ring-indigo-400 ring-inset bg-indigo-950 ' : '')
+                          ? 'cursor-pointer hover:bg-indigo-50 bg-white '
+                          : 'bg-gray-50 ') +
+                        (isConflict ? 'bg-rose-100 text-rose-900 ' : '') +
+                        (isSel ? 'ring-2 ring-indigo-500 ring-inset bg-indigo-100 ' : '')
                       }
                     >
                       {entries.map((e, i) => (
@@ -111,7 +111,7 @@ export default function TableTab({ analysis }) {
                           key={i}
                           className={
                             'font-bold ' +
-                            (isConflict ? 'text-rose-300' : 'text-indigo-200')
+                            (isConflict ? 'text-rose-700' : 'text-indigo-700')
                           }
                         >
                           {e}
@@ -127,13 +127,13 @@ export default function TableTab({ analysis }) {
       </div>
 
       {cell && (
-        <div className="bg-[#0f172a] border border-indigo-500/50 rounded-xl p-5 shadow-xl">
-          <h3 className="text-sm font-bold text-indigo-300 mb-2">
+        <div className="bg-white border border-indigo-300 rounded-xl p-5 shadow-xl">
+          <h3 className="text-sm font-bold text-indigo-700 mb-2">
             Selected Cell Reasoning: M[{selected.nt}, {selected.col}]
           </h3>
-          <div className="text-xs mono space-y-1.5 text-slate-200">
+          <div className="text-xs mono space-y-1.5 text-gray-800">
             {cell.reasons.map((r, i) => (
-              <p key={i} className="bg-[#090d16] p-2.5 rounded border border-[#1e2d4a] font-medium text-slate-300">
+              <p key={i} className="bg-gray-50 p-2.5 rounded border border-gray-200 font-medium text-gray-700">
                 {r}
               </p>
             ))}
@@ -142,7 +142,7 @@ export default function TableTab({ analysis }) {
       )}
 
       {pt.conflicts.length > 0 && (
-        <p className="text-xs font-bold text-rose-400">
+        <p className="text-xs font-bold text-rose-700">
           ⚠️ Cells highlighted in red contain more than one production — indicating an LL(1) conflict.
         </p>
       )}

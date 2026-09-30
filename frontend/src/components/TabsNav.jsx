@@ -15,7 +15,7 @@ const TABS = [
 
 export default function TabsNav({ active, onChange }) {
   return (
-    <div className="flex gap-2 overflow-x-auto border-b border-slate-800/80 bg-slate-900/40 px-3 pt-3">
+    <div className="flex gap-2 overflow-x-auto border-b border-gray-200 bg-gray-50 px-3 pt-3">
       {TABS.map((t) => (
         <button
           key={t.id}
@@ -23,8 +23,8 @@ export default function TabsNav({ active, onChange }) {
           className={
             'whitespace-nowrap px-4 py-2.5 text-sm font-semibold rounded-t-lg transition-all ' +
             (active === t.id
-              ? 'bg-indigo-500/10 text-indigo-400 border-b-2 border-indigo-500'
-              : 'text-slate-400 border-b-2 border-transparent hover:text-slate-200 hover:bg-slate-800/40')
+              ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-600'
+              : 'text-gray-600 border-b-2 border-transparent hover:text-gray-900 hover:bg-gray-100')
           }
         >
           {t.label}

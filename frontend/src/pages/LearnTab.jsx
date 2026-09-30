@@ -87,34 +87,34 @@ const VIVA = [
 export default function LearnTab() {
   return (
     <div className="space-y-6">
-      <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-5 transition-colors">
-        <h3 className="text-sm font-bold text-slate-200 mb-3 uppercase tracking-wide">
+      <div className="bg-white border border-gray-200 rounded-xl p-5 transition-colors">
+        <h3 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-wide">
           Core Concepts
         </h3>
         <div className="grid sm:grid-cols-2 gap-4">
           {TOPICS.map((t) => (
             <div key={t.term} className="border-l-2 border-indigo-500 pl-3">
-              <p className="text-sm font-semibold text-indigo-300">{t.term}</p>
-              <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{t.body}</p>
+              <p className="text-sm font-semibold text-indigo-700">{t.term}</p>
+              <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">{t.body}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-5 transition-colors">
-        <h3 className="text-sm font-bold text-slate-200 mb-3 uppercase tracking-wide">
+      <div className="bg-white border border-gray-200 rounded-xl p-5 transition-colors">
+        <h3 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-wide">
           Viva Preparation & Q&A
         </h3>
         <div className="space-y-3">
           {VIVA.map(([q, a], i) => (
             <details
               key={i}
-              className="border border-[#1e2d4a] bg-[#090d16] hover:bg-[#111a2e] rounded-lg px-3.5 py-2.5 transition-colors group"
+              className="border border-gray-200 bg-gray-50 hover:bg-gray-100 rounded-lg px-3.5 py-2.5 transition-colors group"
             >
-              <summary className="text-sm font-semibold text-slate-200 cursor-pointer outline-none group-hover:text-indigo-300">
+              <summary className="text-sm font-semibold text-gray-800 cursor-pointer outline-none group-hover:text-indigo-700">
                 {q}
               </summary>
-              <p className="text-xs text-slate-300 mt-2 leading-relaxed pl-2 border-l border-indigo-500/60">
+              <p className="text-xs text-gray-700 mt-2 leading-relaxed pl-2 border-l border-indigo-500">
                 {a}
               </p>
             </details>

@@ -249,31 +249,31 @@ export default function ParseTreeView({ tree }) {
   return (
     <div className="space-y-3">
       {/* Control Bar */}
-      <div className="control-bar flex flex-wrap items-center justify-between gap-3 bg-[#090d16] p-3 rounded-lg border border-[#1e2d4a] text-xs">
+      <div className="control-bar flex flex-wrap items-center justify-between gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200 text-xs">
         {/* Stats */}
-        <div className="flex items-center gap-2 font-medium text-slate-300">
-          <span className="inline-flex items-center gap-1 bg-[#131d33] px-2.5 py-1 rounded border border-[#1e2d4a]">
-            <span className="text-slate-400">Nodes:</span>
-            <strong className="text-slate-100">{layoutData.totalNodes}</strong>
+        <div className="flex items-center gap-2 font-medium text-gray-700">
+          <span className="inline-flex items-center gap-1 bg-white px-2.5 py-1 rounded border border-gray-200">
+            <span className="text-gray-600">Nodes:</span>
+            <strong className="text-gray-900">{layoutData.totalNodes}</strong>
           </span>
-          <span className="inline-flex items-center gap-1 bg-[#131d33] px-2.5 py-1 rounded border border-[#1e2d4a]">
-            <span className="text-slate-400">Depth:</span>
-            <strong className="text-slate-100">{layoutData.maxDepth}</strong>
+          <span className="inline-flex items-center gap-1 bg-white px-2.5 py-1 rounded border border-gray-200">
+            <span className="text-gray-600">Depth:</span>
+            <strong className="text-gray-900">{layoutData.maxDepth}</strong>
           </span>
-          <span className="hidden sm:inline-flex items-center gap-1 bg-[#131d33] px-2.5 py-1 rounded border border-[#1e2d4a]">
-            <span className="text-indigo-400 font-bold">Non-terminals:</span>
-            <strong className="text-slate-100">{layoutData.nonTerminalCount}</strong>
+          <span className="hidden sm:inline-flex items-center gap-1 bg-white px-2.5 py-1 rounded border border-gray-200">
+            <span className="text-indigo-700 font-bold">Non-terminals:</span>
+            <strong className="text-gray-900">{layoutData.nonTerminalCount}</strong>
           </span>
-          <span className="hidden sm:inline-flex items-center gap-1 bg-[#131d33] px-2.5 py-1 rounded border border-[#1e2d4a]">
-            <span className="text-amber-400 font-bold">Terminals / ε:</span>
-            <strong className="text-slate-100">{layoutData.terminalCount}</strong>
+          <span className="hidden sm:inline-flex items-center gap-1 bg-white px-2.5 py-1 rounded border border-gray-200">
+            <span className="text-amber-700 font-bold">Terminals / ε:</span>
+            <strong className="text-gray-900">{layoutData.terminalCount}</strong>
           </span>
         </div>
 
         {/* Display Options */}
         <div className="flex items-center gap-2 flex-wrap">
           {/* Connector style */}
-          <div className="flex bg-[#131d33] rounded border border-[#1e2d4a] p-0.5">
+          <div className="flex bg-white rounded border border-gray-200 p-0.5">
             {['orthogonal', 'curved', 'straight'].map((style) => (
               <button
                 key={style}
@@ -282,7 +282,7 @@ export default function ParseTreeView({ tree }) {
                   'px-2 py-0.5 rounded text-xs capitalize transition-colors ' +
                   (lineStyle === style
                     ? 'bg-indigo-600 text-white font-medium'
-                    : 'text-slate-400 hover:text-slate-200')
+                    : 'text-gray-600 hover:text-gray-900')
                 }
               >
                 {style}
@@ -294,35 +294,35 @@ export default function ParseTreeView({ tree }) {
           <select
             value={density}
             onChange={(e) => setDensity(e.target.value)}
-            className="bg-[#131d33] border border-[#1e2d4a] text-slate-200 px-2 py-1 rounded text-xs outline-none"
+            className="bg-white border border-gray-200 text-gray-800 px-2 py-1 rounded text-xs outline-none"
           >
-            <option value="compact" className="bg-slate-900 text-slate-200">Compact</option>
-            <option value="normal" className="bg-slate-900 text-slate-200">Normal</option>
-            <option value="spacious" className="bg-slate-900 text-slate-200">Spacious</option>
+            <option value="compact" className="bg-white text-gray-800">Compact</option>
+            <option value="normal" className="bg-white text-gray-800">Normal</option>
+            <option value="spacious" className="bg-white text-gray-800">Spacious</option>
           </select>
 
           {/* Zoom & Pan Controls */}
-          <div className="flex items-center gap-1 bg-[#131d33] rounded border border-[#1e2d4a] p-0.5">
+          <div className="flex items-center gap-1 bg-white rounded border border-gray-200 p-0.5">
             <button
               onClick={() => setZoom((z) => Math.max(0.4, +(z - 0.15).toFixed(2)))}
-              className="px-2 py-0.5 text-slate-300 hover:bg-slate-800 rounded font-bold"
+              className="px-2 py-0.5 text-gray-700 hover:bg-gray-100 rounded font-bold"
               title="Zoom out"
             >
               -
             </button>
-            <span className="w-10 text-center text-indigo-300 font-mono text-xs">
+            <span className="w-10 text-center text-indigo-700 font-mono text-xs">
               {Math.round(zoom * 100)}%
             </span>
             <button
               onClick={() => setZoom((z) => Math.min(2.5, +(z + 0.15).toFixed(2)))}
-              className="px-2 py-0.5 text-slate-300 hover:bg-slate-800 rounded font-bold"
+              className="px-2 py-0.5 text-gray-700 hover:bg-gray-100 rounded font-bold"
               title="Zoom in"
             >
               +
             </button>
             <button
               onClick={handleCenterView}
-              className="px-1.5 py-0.5 text-indigo-400 hover:bg-indigo-950/80 rounded text-xs font-medium border-l border-[#1e2d4a]"
+              className="px-1.5 py-0.5 text-indigo-700 hover:bg-indigo-50 rounded text-xs font-medium border-l border-gray-200"
               title="Reset Zoom & Pan"
             >
               Reset
@@ -335,8 +335,8 @@ export default function ParseTreeView({ tree }) {
             className={
               'px-2 py-1 rounded text-xs border transition-colors ' +
               (showMinimap
-                ? 'bg-indigo-950/80 border-indigo-500/60 text-indigo-300 font-medium'
-                : 'bg-[#131d33] border-[#1e2d4a] text-slate-400 hover:text-slate-200')
+                ? 'bg-indigo-100 border-indigo-400 text-indigo-700 font-medium'
+                : 'bg-white border-gray-200 text-gray-600 hover:text-gray-900')
             }
             title="Toggle Minimap"
           >
@@ -362,7 +362,7 @@ export default function ParseTreeView({ tree }) {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
         className={
-          'overflow-hidden relative max-h-[640px] h-[520px] bg-[#060a12] bg-[radial-gradient(#1e2d4a_1px,transparent_1px)] [background-size:16px_16px] rounded-xl border border-[#1e2d4a] flex justify-center items-start transition-colors select-none ' +
+          'overflow-hidden relative max-h-[640px] h-[520px] bg-gray-50 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px] rounded-xl border border-gray-200 flex justify-center items-start transition-colors select-none ' +
           (isDragging ? 'cursor-grabbing' : 'cursor-grab')
         }
       >
@@ -395,10 +395,10 @@ export default function ParseTreeView({ tree }) {
                   fill="none"
                   stroke={
                     isHighlighted
-                      ? '#818cf8'
+                      ? '#6366f1'
                       : hasActiveHighlight
-                      ? '#334155'
-                      : '#475569'
+                      ? '#cbd5e1'
+                      : '#94a3b8'
                   }
                   strokeWidth={isHighlighted ? 2.5 : 1.5}
                   className="transition-all duration-150"
@@ -433,9 +433,9 @@ export default function ParseTreeView({ tree }) {
                   className={
                     'mono text-xs px-3 py-1 rounded-lg border shadow-lg transition-colors whitespace-nowrap flex items-center gap-1 ' +
                     (node.is_terminal
-                      ? 'bg-amber-950/80 border-amber-500/60 text-amber-300 font-bold hover:bg-amber-900/90 shadow-amber-950'
-                      : 'bg-indigo-950/80 border-indigo-500/60 text-indigo-200 font-semibold hover:bg-indigo-900/90 shadow-indigo-950') +
-                    (isHighlighted ? ' ring-2 ring-indigo-400 shadow-indigo-900' : '')
+                      ? 'bg-amber-100 border-amber-400 text-amber-800 font-bold hover:bg-amber-200 shadow-amber-200'
+                      : 'bg-indigo-100 border-indigo-400 text-indigo-800 font-semibold hover:bg-indigo-200 shadow-indigo-200') +
+                    (isHighlighted ? ' ring-2 ring-indigo-500 shadow-indigo-300' : '')
                   }
                 >
                   {node.symbol}
@@ -447,10 +447,10 @@ export default function ParseTreeView({ tree }) {
 
         {/* Interactive Minimap Overlay */}
         {showMinimap && (
-          <div className="absolute bottom-3 right-3 bg-[#0f172a]/95 backdrop-blur-md border border-[#1e2d4a] rounded-lg p-2 shadow-2xl z-30 pointer-events-auto">
-            <div className="flex items-center justify-between mb-1 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+          <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200 rounded-lg p-2 shadow-2xl z-30 pointer-events-auto">
+            <div className="flex items-center justify-between mb-1 text-[10px] font-semibold text-gray-600 uppercase tracking-wider">
               <span>Minimap</span>
-              <span className="font-mono text-[9px] text-indigo-400">{Math.round(zoom * 100)}%</span>
+              <span className="font-mono text-[9px] text-indigo-700">{Math.round(zoom * 100)}%</span>
             </div>
             <div
               onClick={(e) => {
@@ -465,7 +465,7 @@ export default function ParseTreeView({ tree }) {
                 })
               }}
               style={{ width: miniWidth, height: miniHeight }}
-              className="relative bg-[#080c14] rounded border border-[#1e2d4a] overflow-hidden cursor-crosshair"
+              className="relative bg-gray-100 rounded border border-gray-200 overflow-hidden cursor-crosshair"
             >
               {/* Mini nodes */}
               {layoutData.allNodes.map((node) => (
@@ -478,7 +478,7 @@ export default function ParseTreeView({ tree }) {
                   }}
                   className={
                     'absolute w-1.5 h-1.5 rounded-full ' +
-                    (node.is_terminal ? 'bg-amber-400' : 'bg-indigo-400')
+                    (node.is_terminal ? 'bg-amber-600' : 'bg-indigo-600')
                   }
                 />
               ))}
@@ -491,7 +491,7 @@ export default function ParseTreeView({ tree }) {
                   left: Math.max(0, Math.min(miniWidth - 30, (miniWidth / 2) - (pan.x / zoom) * miniScale)),
                   top: Math.max(0, Math.min(miniHeight - 20, -(pan.y / zoom) * miniScale))
                 }}
-                className="absolute border-2 border-indigo-500/90 bg-indigo-500/20 rounded-xs pointer-events-none transition-all duration-75"
+                className="absolute border-2 border-indigo-600 bg-indigo-200/40 rounded-xs pointer-events-none transition-all duration-75"
               />
             </div>
           </div>

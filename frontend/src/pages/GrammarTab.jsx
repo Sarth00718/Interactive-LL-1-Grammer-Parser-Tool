@@ -19,16 +19,16 @@ export default function GrammarTab({ analysis }) {
 
       <Section title="Validation">
         {analysis.validation.errors.length === 0 ? (
-          <p className="text-emerald-700 dark:text-emerald-400 text-sm font-medium">✓ Grammar syntax valid</p>
+          <p className="text-emerald-700 text-sm font-medium">✓ Grammar syntax valid</p>
         ) : (
-          <ul className="text-sm text-rose-700 dark:text-rose-400 space-y-1">
+          <ul className="text-sm text-rose-700 space-y-1">
             {analysis.validation.errors.map((e, i) => (
               <li key={i}>✗ {e.message}</li>
             ))}
           </ul>
         )}
         {analysis.validation.warnings.length > 0 && (
-          <ul className="text-sm text-amber-700 dark:text-amber-400 mt-2 space-y-1">
+          <ul className="text-sm text-amber-700 mt-2 space-y-1">
             {analysis.validation.warnings.map((w, i) => (
               <li key={i}>⚠ {w.message}</li>
             ))}
@@ -41,8 +41,8 @@ export default function GrammarTab({ analysis }) {
 
 function Section({ title, children }) {
   return (
-    <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-5 transition-colors">
-      <h3 className="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wide">{title}</h3>
+    <div className="bg-white border border-gray-200 rounded-xl p-5 transition-colors">
+      <h3 className="text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">{title}</h3>
       {children}
     </div>
   )
@@ -50,17 +50,17 @@ function Section({ title, children }) {
 
 function Field({ label, value }) {
   return (
-    <div className="bg-[#0f172a] border border-[#1e2d4a] rounded-xl p-4 transition-colors">
-      <p className="text-xs uppercase tracking-wide text-slate-400 mb-1">{label}</p>
-      <p className="mono text-sm text-indigo-300 font-semibold break-words">{value}</p>
+    <div className="bg-white border border-gray-200 rounded-xl p-4 transition-colors">
+      <p className="text-xs uppercase tracking-wide text-gray-600 mb-1">{label}</p>
+      <p className="mono text-sm text-indigo-700 font-semibold break-words">{value}</p>
     </div>
   )
 }
 
 export function Empty() {
   return (
-    <div className="bg-[#090d16] border border-dashed border-[#1e2d4a] rounded-xl p-10 text-center text-slate-400 text-sm transition-colors">
-      Enter a grammar above and click <span className="font-semibold text-indigo-400">Analyze</span> to get started.
+    <div className="bg-gray-50 border border-dashed border-gray-300 rounded-xl p-10 text-center text-gray-600 text-sm transition-colors">
+      Enter a grammar above and click <span className="font-semibold text-indigo-600">Analyze</span> to get started.
     </div>
   )
 }
