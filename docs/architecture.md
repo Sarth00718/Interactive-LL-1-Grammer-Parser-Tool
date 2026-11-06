@@ -1,86 +1,92 @@
-# Architecture
+# Architecture: Complete Grammar Analysis & Parsing Laboratory
 
-## Pipeline
+## System Overview
+
+The **Complete Grammar Analysis & Parsing Laboratory** is an interactive compiler design system supporting:
+- **Top-Down Parsing**: LL(1) predictive parsing with step derivations, recursion elimination, left factoring, and parse trees.
+- **Bottom-Up Parsing**: The complete LR family: LR(0), SLR(1), Canonical LR(1) (CLR), and LALR(1).
+- **Automata Visualization**: Interactive DFA transition graphs rendered with React Flow from backend state collections.
+- **Parsing Simulation**: Step-by-step trace of state stacks, symbol stacks, remaining input, actions, and dynamically generated parse trees.
+- **Multi-Algorithm Comparison**: 5-way comparative matrix across all supported parsers.
+
+The backend (FastAPI + Pydantic) serves as the **single source of truth**. All grammar transformations, first/follow derivations, item closures, GOTO transitions, parsing tables, conflict classifications, and parse trees are computed from scratch in pure Python without external parser-generator libraries (no PLY, Lark, ANTLR, SLY, or yacc).
+
+---
+
+## Directory Organization
 
 ```
-Original CFG (raw text)
-        │
-        ▼
-grammar_parser.py        — text → internal Grammar object (Production list per LHS)
-        │
-        ▼
-grammar_validator.py     — structural checks: empty LHS/RHS, duplicate productions,
-        │                   unreachable non-terminals, missing productions
-        ▼
-left_recursion.py        — detect_left_recursion(): direct + indirect (cycle detection
-        │                   on the "can-start-with" graph)
-        │
-        │  [Original Grammar Diagnostics — FIRST/FOLLOW/LL(1) computed directly on
-        │   this untransformed grammar too, but only as an educational comparison;
-        │   never used to build the parsing table]
-        │
-        ▼
-left_recursion.py        — eliminate_left_recursion(): standard ordered-substitution
-        │                   algorithm (handles direct AND indirect recursion)
-        ▼
-left_factoring.py        — left_factor(): repeatedly factors common prefixes until
-        │                   none remain (including on newly introduced non-terminals)
-        ▼
-FINAL TRANSFORMED GRAMMAR
-        │
-        ▼
-first.py                 — compute_first_sets(): fixed-point algorithm + derivation log
-        ▼
-follow.py                — compute_follow_sets(): fixed-point algorithm + derivation log
-        ▼
-parsing_table.py         — build_parsing_table(): M[A, a] from FIRST/FOLLOW,
-        │                   conflict detection
-        ▼
-ll1_analyzer.py          — classify_and_summarize(): FIRST/FIRST vs FIRST/FOLLOW
-        │
-        ▼
-predictive_parser.py     — run_predictive_parse(): stack-based table-driven parse,
-        │                   full step trace, structured errors
-        ▼
-parse_tree.py            — build_parse_tree(): re-runs the parse with a parallel
-                            node-stack so the tree mirrors real parser actions
+breaking-down-grammars/
+├── backend/
+│   ├── app/
+│   │   ├── main.py                  # FastAPI application entrypoint
+│   │   ├── models/
+│   │   │   ├── grammar.py           # Core CFG dataclasses (Grammar, Production)
+│   │   │   └── api_models.py        # Pydantic request & response schemas
+│   │   ├── routes/
+│   │   │   ├── grammar.py           # /api/grammar/* routes (validation, analyze, FIRST/FOLLOW)
+│   │   │   ├── parser.py            # /api/parser/* (top-down & bottom-up analyze, parse, compare)
+│   │   │   └── bottom_up.py         # /api/bottom-up/* routes
+│   │   ├── services/
+│   │   │   ├── grammar/             # Shared CFG engine
+│   │   │   │   ├── parser.py        # BNF syntax tokenizer & parser
+│   │   │   │   ├── validator.py     # Semantic diagnostics & non-generating symbols
+│   │   │   │   ├── transformations.py # Grammar orchestration
+│   │   │   │   └── augmented.py     # Grammar augmentation (S' -> S)
+│   │   │   ├── top_down/            # Top-down LL(1) parsing pipeline
+│   │   │   │   ├── first.py         # FIRST sets computation & derivation logs
+│   │   │   │   ├── follow.py        # FOLLOW sets computation & derivation logs
+│   │   │   │   ├── left_recursion.py# Direct & indirect left-recursion elimination
+│   │   │   │   ├── left_factoring.py# Multi-step common prefix factoring
+│   │   │   │   ├── ll1_analyzer.py  # Conflict classification (FIRST/FIRST vs FIRST/FOLLOW)
+│   │   │   │   ├── parsing_table.py # Predictive table M[A, a] builder
+│   │   │   │   ├── predictive_parser.py # Stack trace simulator
+│   │   │   │   ├── parse_tree.py    # Top-down expansion tree builder
+│   │   │   │   └── explanations.py  # Educational derivations
+│   │   │   └── bottom_up/           # Bottom-up LR parsing pipeline
+│   │   │       ├── item.py          # LR(0) and LR(1) immutable item structures
+│   │   │       ├── lr0/             # LR(0) closure, GOTO, DFA, and table
+│   │   │       ├── slr/             # SLR(1) FOLLOW-based reduction table
+│   │   │       ├── clr/             # Canonical LR(1) items with FIRST(β a) lookahead
+│   │   │       ├── lalr/            # LALR(1) LR(0) core merging & conflict diagnostics
+│   │   │       ├── parsing/         # Table-driven shift-reduce engine & parse tree
+│   │   │       ├── analyzer.py      # Unified bottom-up analysis orchestrator
+│   │   │       └── comparison.py    # 5-way comparative matrix engine
+│   │   └── utils/
+│   │       └── examples.py          # Curated CFG examples covering all categories
+│   └── tests/                       # Pytest suite with 60 comprehensive tests
+│
+└── frontend/
+    └── src/
+        ├── App.jsx                  # Main application container
+        ├── context/
+        │   └── ThemeContext.jsx     # Dark mode context & persistence
+        ├── components/
+        │   ├── SidebarNav.jsx       # Left sidebar navigation
+        │   ├── Header.jsx           # Top header with dark mode toggle
+        │   ├── AutomatonGraph.jsx   # React Flow DFA graph component
+        │   ├── ParsingTableComponent.jsx # Color-coded ACTION/GOTO table
+        │   ├── ParsingSimulator.jsx # Step-by-step trace simulator
+        │   └── ParseTreeView.jsx    # SVG dynamic parse tree visualizer
+        └── pages/
+            ├── DashboardView.jsx    # Welcome dashboard & quick starts
+            ├── WorkspaceView.jsx    # CFG grammar editor & validator
+            ├── ComparisonView.jsx   # 5-way comparative matrix
+            ├── ExamplesView.jsx     # Grammar library browser
+            ├── DocsView.jsx         # Theoretical algorithm documentation
+            ├── top_down/            # Dedicated top-down LL(1) pages
+            │   ├── TopDownView.jsx  # LL(1) laboratory view
+            │   ├── FirstTab.jsx     # FIRST sets derivation
+            │   ├── FollowTab.jsx    # FOLLOW sets derivation
+            │   ├── LL1Tab.jsx       # LL(1) conflicts
+            │   ├── TableTab.jsx     # Predictive table M[A, a]
+            │   ├── TransformTab.jsx # Recursion & factoring steps
+            │   ├── ParserTab.jsx    # Predictive simulator
+            │   └── ParseTreeTab.jsx # Top-down parse tree
+            └── bottom_up/           # Dedicated bottom-up LR pages
+                ├── BottomUpLabView.jsx # Unified bottom-up laboratory
+                ├── LR0View.jsx      # Dedicated LR(0) Automaton page
+                ├── SLR1View.jsx     # Dedicated SLR(1) Parser page
+                ├── CLR1View.jsx     # Dedicated CLR(1) Parser page
+                └── LALR1View.jsx    # Dedicated LALR(1) Parser page
 ```
-
-`transformations.py` is the orchestrator: it calls every module above in order
-and returns one JSON-serializable dict, which is exactly what
-`POST /api/grammar/analyze` returns. This keeps the "single comprehensive
-analysis endpoint" the API design principle asks for, while still letting each
-algorithm live in its own single-responsibility module (also satisfying the
-2-student work split: Student 1 owns everything up through `parsing_table.py`;
-Student 2 owns `predictive_parser.py`, `parse_tree.py`, the FastAPI routes, and
-the whole `frontend/`).
-
-## Why FIRST/FOLLOW are computed twice
-
-The spec requires that the **final** LL(1) table be built strictly from
-FIRST/FOLLOW of the transformed grammar — never the original. But it also
-asks for an *educational* diagnostic view of the original grammar. Rather than
-skip that diagnostic, `transformations.analyze_grammar()` computes FIRST/
-FOLLOW/the table **twice**: once on the untransformed grammar (labeled
-`original_diagnostics`, explicitly marked "Not Used for Final LL(1) Table" in
-both the API response and the UI), and once on the final grammar (labeled
-`final_first` / `final_follow` / `parsing_table`, which is what
-`/api/parser/parse` actually uses).
-
-## Data model
-
-`app/models/grammar.py` defines `Production` (stable `id`, `lhs`, `rhs` list
-of symbols) and `Grammar` (`start_symbol`, `non_terminals` in declaration
-order, `terminals`, and a `productions: Dict[str, List[Production]]` map).
-Every transformation module takes a `Grammar` and returns either a **new**
-`Grammar` (transformations never mutate in place, so "before/after" comparisons
-stay valid) plus a list of human-readable `steps` describing what changed and
-why.
-
-## Frontend
-
-The frontend is a pure rendering layer. `src/services/api.js` is the only
-place that talks to the network; every tab component
-(`src/pages/*.jsx`) receives the already-fetched `analysis` object as a prop
-and renders it. No FIRST/FOLLOW/table/parsing logic exists anywhere in
-`frontend/`.

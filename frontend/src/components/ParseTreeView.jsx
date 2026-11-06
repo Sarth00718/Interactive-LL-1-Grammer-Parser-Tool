@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react'
+import { Map as MapIcon, Download, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react'
 
 // Tree layout algorithm: assigns (X, Y) coordinates to each node in parse tree
 function computeTreeLayout(rootNode, { nodeWidth = 72, levelHeight = 78, paddingX = 60, paddingY = 50 }) {
@@ -305,27 +306,28 @@ export default function ParseTreeView({ tree }) {
           <div className="flex items-center gap-1 bg-white rounded border border-gray-200 p-0.5">
             <button
               onClick={() => setZoom((z) => Math.max(0.4, +(z - 0.15).toFixed(2)))}
-              className="px-2 py-0.5 text-gray-700 hover:bg-gray-100 rounded font-bold"
+              className="p-1.5 text-gray-700 hover:bg-gray-100 rounded"
               title="Zoom out"
             >
-              -
+              <ZoomOut className="w-3.5 h-3.5" />
             </button>
             <span className="w-10 text-center text-indigo-700 font-mono text-xs">
               {Math.round(zoom * 100)}%
             </span>
             <button
               onClick={() => setZoom((z) => Math.min(2.5, +(z + 0.15).toFixed(2)))}
-              className="px-2 py-0.5 text-gray-700 hover:bg-gray-100 rounded font-bold"
+              className="p-1.5 text-gray-700 hover:bg-gray-100 rounded"
               title="Zoom in"
             >
-              +
+              <ZoomIn className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={handleCenterView}
-              className="px-1.5 py-0.5 text-indigo-700 hover:bg-indigo-50 rounded text-xs font-medium border-l border-gray-200"
+              className="px-1.5 py-1 text-indigo-700 hover:bg-indigo-50 rounded text-xs font-medium border-l border-gray-200 flex items-center gap-1"
               title="Reset Zoom & Pan"
             >
-              Reset
+              <RotateCcw className="w-3 h-3" />
+              <span>Reset</span>
             </button>
           </div>
 
@@ -333,23 +335,25 @@ export default function ParseTreeView({ tree }) {
           <button
             onClick={() => setShowMinimap(!showMinimap)}
             className={
-              'px-2 py-1 rounded text-xs border transition-colors ' +
+              'px-2.5 py-1 rounded text-xs border transition-colors flex items-center gap-1.5 ' +
               (showMinimap
                 ? 'bg-indigo-100 border-indigo-400 text-indigo-700 font-medium'
                 : 'bg-white border-gray-200 text-gray-600 hover:text-gray-900')
             }
             title="Toggle Minimap"
           >
-            🗺️ Minimap
+            <MapIcon className="w-3.5 h-3.5" />
+            <span>Minimap</span>
           </button>
 
           {/* PNG Export */}
           <button
             onClick={handleExportPNG}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded text-xs font-medium transition shadow-md flex items-center gap-1"
+            className="bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded text-xs font-medium transition shadow-md flex items-center gap-1.5"
             title="Export parse tree as PNG image"
           >
-            📷 Export Image
+            <Download className="w-3.5 h-3.5" />
+            <span>Export Image</span>
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
-from app.services.grammar_parser import parse_grammar_text
-from app.services.left_recursion import detect_left_recursion, eliminate_left_recursion
+from app.services.grammar.parser import parse_grammar_text
+from app.services.top_down.left_recursion import detect_left_recursion, eliminate_left_recursion
 
 
 def test_direct_left_recursion_detected():

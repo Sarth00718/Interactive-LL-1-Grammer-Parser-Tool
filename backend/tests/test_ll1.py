@@ -1,5 +1,5 @@
-from app.services.grammar_parser import parse_grammar_text
-from app.services.transformations import analyze_grammar
+from app.services.grammar.parser import parse_grammar_text
+from app.services.grammar.transformations import analyze_grammar
 
 
 def test_valid_ll1_grammar():

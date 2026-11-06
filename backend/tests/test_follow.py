@@ -1,6 +1,6 @@
-from app.services.grammar_parser import parse_grammar_text
-from app.services.first import compute_first_sets
-from app.services.follow import compute_follow_sets
+from app.services.grammar.parser import parse_grammar_text
+from app.services.top_down.first import compute_first_sets
+from app.services.top_down.follow import compute_follow_sets
 
 
 def _follow_for(text):

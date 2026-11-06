@@ -1,97 +1,99 @@
-# Breaking Down Grammars
+# Complete Grammar Analysis & Parsing Laboratory
 
-**An Interactive LL(1) Grammar Analysis and Predictive Parsing Tool**
+**An Interactive Compiler Design Laboratory Supporting Top-Down and Bottom-Up Parsing**
 
-A 2-student Innovative Assignment for Principles of Compiler Design.
+A comprehensive educational compiler design platform implementing all major parsing paradigms from scratch:
+- **Top-Down Parsing**: LL(1) Predictive Parsing with derivation explanations, left-recursion elimination, left factoring, conflict classification, and dynamic parse trees.
+- **Bottom-Up Parsing**: The complete LR family:
+  - **LR(0)**: Canonical collection of LR(0) item sets, closure, GOTO, DFA transition graphs, and unconditional reduction analysis.
+  - **SLR(1)**: FOLLOW-based reduction placement, resolving shift/reduce conflicts without extra states.
+  - **CLR(1) / Canonical LR(1)**: Explicit lookahead propagation using $\text{FIRST}(\beta a)$ context for maximal deterministic parsing power.
+  - **LALR(1)**: Canonical LR(1) core merging, lookahead unioning, state compression, and merge-induced Reduce/Reduce conflict diagnostics.
+- **Automata Visualization**: Interactive state automata transition graphs powered by React Flow (`@xyflow/react`).
+- **Step-by-Step Simulation**: Interactive play, pause, single-step forward/backward, and speed controls for stack and symbol execution traces.
+- **Dynamic Parse Tree Generation**: Rendered directly from actual parser actions (expansion steps for LL(1); shift/reduce operations for LR).
+- **Multi-Parser Comparison**: Real-time 5-way comparative matrix across LL(1), LR(0), SLR(1), CLR(1), and LALR(1).
 
-## What it does
+Every algorithm is implemented from scratch in pure Python without external parser generators (no PLY, Lark, ANTLR, SLY, or yacc).
 
-Given a raw Context-Free Grammar, the tool:
-
-1. Validates it and identifies terminals, non-terminals, and the start symbol
-2. Diagnoses the **original** grammar (left recursion — direct and indirect)
-3. Eliminates left recursion and performs left factoring where needed
-4. Computes FIRST and FOLLOW sets **on the final transformed grammar**, with
-   a full derivation trace for every set
-5. Builds the LL(1) parsing table and detects/classifies conflicts
-   (FIRST/FIRST vs FIRST/FOLLOW), with a reasoning trace for every populated cell
-6. Runs a table-driven predictive parser on a user-supplied input string,
-   producing a full stack/input/action trace and useful error diagnostics
-7. Builds and renders a parse tree generated directly from the parser's own
-   operations (never hard-coded)
-
-Every algorithm (grammar parsing, FIRST, FOLLOW, left-recursion
-detection/elimination, left factoring, LL(1) table construction, predictive
-parsing, parse-tree construction) is implemented from scratch in
-`backend/app/services/` — no parser-generator library is used anywhere in
-the pipeline.
+---
 
 ## Architecture
 
 ```
-backend/   FastAPI + Pydantic. All Compiler Design algorithms live here.
-           This is the single source of truth — the frontend never
-           computes FIRST/FOLLOW/the table/parse results itself.
-frontend/  React + Vite + Tailwind (no TypeScript). Pure visualization
-           layer over the backend's JSON responses.
-examples/  (see backend/app/utils/examples.py — the example grammar
-           library used by both the API and the UI's "Load example" menu)
-docs/      Algorithm notes and architecture write-up.
+backend/   FastAPI + Pydantic. The single source of truth for all grammar
+           and parsing algorithms. React never calculates parsing tables,
+           automata states, or parse results independently.
+frontend/  React + Vite + JavaScript + Tailwind CSS. Developer-tool
+           interface with dark mode, interactive graph automata,
+           parse tree visualizer, and step-by-step simulator.
+docs/      Theoretical algorithms, system architecture, and viva notes.
 ```
 
-## Quick start
+---
 
-**Backend** (terminal 1):
+## Quick Start Instructions
+
+### 1. Backend Setup
+
 ```bash
 cd backend
-python3 -m venv venv && source venv/bin/activate
+python -m venv venv
+# On Windows:
+.\venv\Scripts\activate
+# On Linux / macOS:
+source venv/bin/activate
+
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
-**Frontend** (terminal 2):
+Backend API will be available at: `http://localhost:8000`  
+Interactive Swagger docs: `http://localhost:8000/docs`
+
+### 2. Frontend Setup
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`.
+Frontend application will run at: `http://localhost:5173`
+
+---
 
 ## Testing
 
+Run the full pytest suite:
+
 ```bash
-cd backend
-pytest -q
+# From workspace root
+backend\venv\Scripts\pytest backend\tests
 ```
 
-32 tests cover FIRST, FOLLOW, left-recursion detection/elimination (direct
-and indirect), left factoring, LL(1) conflict classification, the predictive
-parser (valid/invalid input, empty input, error messages), and grammar
-validation.
+Run frontend build check:
 
-## Demo grammars (bundled, also available via `GET /api/examples`)
+```bash
+npm --prefix frontend run build
+```
 
-| Example | Demonstrates |
-|---|---|
-| Arithmetic (`E -> T E' | ...`) | Already-LL(1) grammar, full pipeline, accept trace |
-| Left-recursive arithmetic (`E -> E + T | T`) | Direct left-recursion elimination |
-| `S -> A | B`, `A -> a`, `B -> a` | A genuine, non-removable FIRST/FIRST conflict |
-| `S -> a A | a B` | A conflict that *is* removable — resolved by left factoring |
-| Dangling-else style grammar | Left factoring, and a FIRST/FOLLOW conflict that factoring alone cannot remove |
-| `S -> A B`, `A -> a\|ε`, `B -> b\|ε` | Nullable non-terminals, FOLLOW propagation |
-| `A -> B a \| c`, `B -> A b \| d` | Indirect left recursion |
-| Malformed grammar | Validation error reporting |
+---
 
-## Key design principle
+## API Summary
 
-The backend is the single source of truth. The frontend sends raw grammar
-text (and, for parsing, an input string) to `/api/grammar/analyze` or
-`/api/parser/parse`, and renders the structured result — it never
-independently recomputes FIRST, FOLLOW, the parsing table, or parse results.
-
-## Documentation
-
-See `docs/architecture.md` and `docs/algorithms.md` for a deeper write-up of
-the pipeline and each algorithm (with pseudocode), suitable for the project
-report and viva.
+- `GET  /api/health` — Service health and supported parsing methods
+- `GET  /api/examples` — Curated CFG library with expected compatibility
+- `POST /api/grammar/validate` — Syntax and semantic validation
+- `POST /api/grammar/analyze` — Unified top-down grammar analysis
+- `POST /api/parser/ll1/analyze` — LL(1) predictive table and conflicts
+- `POST /api/parser/ll1/parse` — LL(1) input string parsing with step trace and parse tree
+- `POST /api/parser/lr0/analyze` — LR(0) canonical collection and ACTION/GOTO table
+- `POST /api/parser/lr0/parse` — LR(0) table-driven shift-reduce execution
+- `POST /api/parser/slr/analyze` — SLR(1) FOLLOW-based reduction table and conflicts
+- `POST /api/parser/slr/parse` — SLR(1) shift-reduce execution
+- `POST /api/parser/clr/analyze` — Canonical LR(1) item sets and parsing table
+- `POST /api/parser/clr/parse` — CLR(1) shift-reduce execution
+- `POST /api/parser/lalr/analyze` — LALR(1) core merging and conflict diagnostics
+- `POST /api/parser/lalr/parse` — LALR(1) shift-reduce execution
+- `POST /api/parser/compare` — 5-way comparative matrix across all parsers

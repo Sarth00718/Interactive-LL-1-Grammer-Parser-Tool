@@ -1,5 +1,5 @@
-from app.services.grammar_parser import parse_grammar_text
-from app.services.first import compute_first_sets
+from app.services.grammar.parser import parse_grammar_text
+from app.services.top_down.first import compute_first_sets
 
 
 def test_first_simple_terminals():

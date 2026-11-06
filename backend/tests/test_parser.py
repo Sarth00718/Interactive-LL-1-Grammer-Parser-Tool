@@ -1,6 +1,6 @@
-from app.services.grammar_parser import parse_grammar_text
-from app.services import left_recursion, left_factoring, first, follow, parsing_table
-from app.services.predictive_parser import run_predictive_parse
+from app.services.grammar.parser import parse_grammar_text
+from app.services.top_down import left_recursion, left_factoring, first, follow, parsing_table
+from app.services.top_down.predictive_parser import run_predictive_parse
 
 
 def _build(text):

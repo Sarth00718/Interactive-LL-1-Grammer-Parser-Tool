@@ -1,5 +1,5 @@
-from app.services.grammar_parser import parse_grammar_text
-from app.services.left_factoring import left_factor
+from app.services.grammar.parser import parse_grammar_text
+from app.services.top_down.left_factoring import left_factor
 
 
 def test_simple_common_prefix():

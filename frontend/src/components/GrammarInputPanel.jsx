@@ -1,4 +1,5 @@
 import React from 'react'
+import { AlertTriangle } from 'lucide-react'
 import StatusBadge from './StatusBadge.jsx'
 
 export default function GrammarInputPanel({
@@ -81,11 +82,9 @@ export default function GrammarInputPanel({
 
       {error && (
         <div className="mt-5 bg-rose-50 border border-rose-300 text-rose-900 rounded-xl p-4 text-sm backdrop-blur-sm">
-          <p className="font-bold text-rose-700 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            Grammar Error
+          <p className="font-bold text-rose-700 flex items-center gap-1.5">
+            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+            <span>Grammar Error</span>
           </p>
           <p className="mt-1.5">{error.error || error.message}</p>
           {error.production && (

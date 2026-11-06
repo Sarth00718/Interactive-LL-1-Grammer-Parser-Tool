@@ -1,0 +1,10 @@
+{
+  "name": "breaking-down-grammars",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Interactive Compiler Design laboratory supporting Top-Down (LL(1)) and Bottom-Up (LR(0), SLR(1), CLR(1), LALR(1)) parsing.",
+  "scripts": {
+    "build": "npm --prefix frontend install && npm --prefix frontend run build"
+  }
+}
+

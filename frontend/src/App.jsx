@@ -1,36 +1,47 @@
 import React, { useState, useEffect } from 'react'
-import GrammarInputPanel from './components/GrammarInputPanel.jsx'
-import TabsNav from './components/TabsNav.jsx'
-import GrammarTab from './pages/GrammarTab.jsx'
-import DiagnosticsTab from './pages/DiagnosticsTab.jsx'
-import TransformTab from './pages/TransformTab.jsx'
-import FirstTab from './pages/FirstTab.jsx'
-import FollowTab from './pages/FollowTab.jsx'
-import LL1Tab from './pages/LL1Tab.jsx'
-import TableTab from './pages/TableTab.jsx'
-import ParserTab from './pages/ParserTab.jsx'
-import ParseTreeTab from './pages/ParseTreeTab.jsx'
-import LearnTab from './pages/LearnTab.jsx'
+import { ThemeProvider } from './context/ThemeContext.jsx'
+import SidebarNav from './components/SidebarNav.jsx'
+import Header from './components/Header.jsx'
+import DashboardView from './pages/DashboardView.jsx'
+import WorkspaceView from './pages/WorkspaceView.jsx'
+import { TopDownView } from './pages/top_down/index.js'
+import { BottomUpLabView, LR0View, SLR1View, CLR1View, LALR1View } from './pages/bottom_up/index.js'
+import ComparisonView from './pages/ComparisonView.jsx'
+import ExamplesView from './pages/ExamplesView.jsx'
+import DocsView from './pages/DocsView.jsx'
+import VivaPrepView from './pages/VivaPrepView.jsx'
 import { api } from './services/api.js'
 
 const DEFAULT_GRAMMAR = "E -> T E'\nE' -> + T E' | epsilon\nT -> F T'\nT' -> * F T' | epsilon\nF -> ( E ) | id"
 
-export default function App() {
+export function AppContent() {
+  const [activeNav, setActiveNav] = useState('dashboard')
+  const [activeSubTab, setActiveSubTab] = useState(null)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
   const [grammarText, setGrammarText] = useState(DEFAULT_GRAMMAR)
   const [startSymbol, setStartSymbol] = useState('')
   const [selectedExampleId, setSelectedExampleId] = useState('arithmetic-ll1')
+  const [sampleInput, setSampleInput] = useState('id + id * id')
+
   const [analysis, setAnalysis] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [tab, setTab] = useState('grammar')
   const [examples, setExamples] = useState([])
-  const [sampleInput, setSampleInput] = useState('id + id * id')
   const [parseResult, setParseResult] = useState(null)
 
+  // Load examples on mount
   useEffect(() => {
-    document.documentElement.classList.remove('dark')
     api.examples().then(setExamples).catch(() => {})
+    // Auto-analyze initial grammar
+    runAnalyze(DEFAULT_GRAMMAR, '')
   }, [])
+
+  const handleSelectNav = (navId, subTabId = null) => {
+    setActiveNav(navId)
+    setActiveSubTab(subTabId)
+  }
 
   const handleGrammarTextChange = (text) => {
     setGrammarText(text)
@@ -41,12 +52,14 @@ export default function App() {
     setSelectedExampleId(matchingEx ? matchingEx.id : '')
   }
 
-  const runAnalyze = async () => {
+  const runAnalyze = async (textToAnalyze, symbolOverride) => {
+    const text = textToAnalyze !== undefined ? textToAnalyze : grammarText
+    const sym = symbolOverride !== undefined ? symbolOverride : startSymbol
     setLoading(true)
     setError(null)
     setParseResult(null)
     try {
-      const res = await api.analyze(grammarText, startSymbol || null)
+      const res = await api.analyze(text, sym || null)
       if (res.stopped_after_validation) {
         setAnalysis(res)
         setError(
@@ -65,6 +78,19 @@ export default function App() {
     }
   }
 
+  const handleValidate = async () => {
+    try {
+      const res = await api.validateGrammar(grammarText, startSymbol || null)
+      return res.validation
+    } catch (e) {
+      return {
+        is_valid: false,
+        errors: [{ type: 'syntax_error', message: e.message || 'Validation error' }],
+        warnings: [],
+      }
+    }
+  }
+
   const loadExample = (id) => {
     const ex = examples.find((e) => e.id === id)
     if (!ex) return
@@ -75,60 +101,161 @@ export default function App() {
     setAnalysis(null)
     setError(null)
     setParseResult(null)
+    runAnalyze(ex.grammar_text, '')
   }
 
-  const analysisValid = analysis && !analysis.stopped_after_validation
-
   return (
-    <div className="min-h-screen py-8 px-4 bg-gray-50 text-gray-800 selection:bg-indigo-200 selection:text-indigo-900 font-sans relative">
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-indigo-100/50 via-gray-50/50 to-transparent pointer-events-none"></div>
-      <div className="max-w-6xl mx-auto space-y-6 relative z-10">
-        <GrammarInputPanel
-          grammarText={grammarText}
-          setGrammarText={handleGrammarTextChange}
-          startSymbol={startSymbol}
-          setStartSymbol={setStartSymbol}
-          onAnalyze={runAnalyze}
-          examples={examples}
-          selectedExampleId={selectedExampleId}
-          onLoadExample={loadExample}
+    <div className="min-h-screen bg-[#F7F8FA] dark:bg-[#0B0F19] text-[#172033] dark:text-[#F8FAFC] flex transition-colors">
+      {/* Sidebar Navigation */}
+      <SidebarNav
+        activeNav={activeNav}
+        activeSubTab={activeSubTab}
+        onSelectNav={handleSelectNav}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapsed={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+      />
+
+      {/* Main Content Pane */}
+      <div
+        className={`flex-1 flex flex-col min-w-0 transition-all duration-200 ${
+          isSidebarCollapsed ? 'lg:pl-[68px]' : 'lg:pl-[270px]'
+        }`}
+      >
+        {/* Top Header */}
+        <Header
+          activeNav={activeNav}
+          activeSubTab={activeSubTab}
+          onOpenSidebar={() => setIsSidebarOpen(true)}
           loading={loading}
-          error={error}
-          analysis={analysis}
+          grammarText={grammarText}
+          isCollapsed={isSidebarCollapsed}
         />
 
-        <div className="bg-white backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-          <TabsNav active={tab} onChange={setTab} />
-          <div className="p-5 sm:p-7">
-            {tab === 'grammar' && <GrammarTab analysis={analysisValid ? analysis : null} />}
-            {tab === 'diagnostics' && <DiagnosticsTab analysis={analysisValid ? analysis : null} />}
-            {tab === 'transform' && <TransformTab analysis={analysisValid ? analysis : null} />}
-            {tab === 'first' && <FirstTab analysis={analysisValid ? analysis : null} />}
-            {tab === 'follow' && <FollowTab analysis={analysisValid ? analysis : null} />}
-            {tab === 'll1' && <LL1Tab analysis={analysisValid ? analysis : null} />}
-            {tab === 'table' && <TableTab analysis={analysisValid ? analysis : null} />}
-            {tab === 'parser' && (
-              <ParserTab
-                analysis={analysisValid ? analysis : null}
-                grammarText={grammarText}
-                startSymbol={startSymbol}
-                sampleInput={sampleInput}
-                result={parseResult}
-                setResult={setParseResult}
-              />
-            )}
-            {tab === 'tree' && <ParseTreeTab parseResult={parseResult} />}
-            {tab === 'learn' && <LearnTab />}
-          </div>
-        </div>
+        {/* Dynamic View Container */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+          {activeNav === 'dashboard' && (
+            <DashboardView
+              analysis={analysis}
+              onNavigate={handleSelectNav}
+              onLoadExample={loadExample}
+              examples={examples}
+            />
+          )}
 
-        <p className="text-center text-sm font-medium text-gray-500 pb-8 pt-4">
-          Principles of Compiler Design — Interactive LL(1) Parsing Tool
-        </p>
+          {activeNav === 'workspace' && (
+            <WorkspaceView
+              grammarText={grammarText}
+              setGrammarText={handleGrammarTextChange}
+              startSymbol={startSymbol}
+              setStartSymbol={setStartSymbol}
+              onAnalyze={() => runAnalyze()}
+              onValidate={handleValidate}
+              loading={loading}
+              error={error}
+              analysis={analysis}
+              examples={examples}
+              selectedExampleId={selectedExampleId}
+              onLoadExample={loadExample}
+              onNavigate={handleSelectNav}
+            />
+          )}
+
+          {activeNav === 'top-down' && (
+            <TopDownView
+              analysis={analysis}
+              grammarText={grammarText}
+              startSymbol={startSymbol}
+              sampleInput={sampleInput}
+              parseResult={parseResult}
+              setParseResult={setParseResult}
+              initialSubTab={activeSubTab}
+              onNavigate={handleSelectNav}
+            />
+          )}
+
+          {activeNav === 'bottom-up' && (
+            <BottomUpLabView
+              grammarText={grammarText}
+              startSymbol={startSymbol}
+              sampleInput={sampleInput}
+              initialAlgorithm="SLR1"
+              initialTab={activeSubTab}
+              onNavigate={handleSelectNav}
+            />
+          )}
+
+          {activeNav === 'lr0' && (
+            <LR0View
+              grammarText={grammarText}
+              startSymbol={startSymbol}
+              sampleInput={sampleInput}
+              initialTab={activeSubTab}
+              onNavigate={handleSelectNav}
+            />
+          )}
+
+          {activeNav === 'slr1' && (
+            <SLR1View
+              grammarText={grammarText}
+              startSymbol={startSymbol}
+              sampleInput={sampleInput}
+              initialTab={activeSubTab}
+              onNavigate={handleSelectNav}
+            />
+          )}
+
+          {activeNav === 'clr1' && (
+            <CLR1View
+              grammarText={grammarText}
+              startSymbol={startSymbol}
+              sampleInput={sampleInput}
+              initialTab={activeSubTab}
+              onNavigate={handleSelectNav}
+            />
+          )}
+
+          {activeNav === 'lalr1' && (
+            <LALR1View
+              grammarText={grammarText}
+              startSymbol={startSymbol}
+              sampleInput={sampleInput}
+              initialTab={activeSubTab}
+              onNavigate={handleSelectNav}
+            />
+          )}
+
+          {activeNav === 'compare' && (
+            <ComparisonView
+              grammarText={grammarText}
+              startSymbol={startSymbol}
+              sampleInput={sampleInput}
+              onNavigate={handleSelectNav}
+            />
+          )}
+
+          {activeNav === 'examples' && (
+            <ExamplesView
+              examples={examples}
+              onLoadExample={loadExample}
+              onNavigate={handleSelectNav}
+            />
+          )}
+
+          {activeNav === 'docs' && <DocsView />}
+
+          {activeNav === 'viva' && <VivaPrepView />}
+        </main>
       </div>
     </div>
   )
 }
 
-
-
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  )
+}

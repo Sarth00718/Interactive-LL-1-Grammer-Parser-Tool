@@ -1,7 +1,7 @@
 import pytest
 from app.models.grammar import GrammarError
-from app.services.grammar_parser import parse_grammar_text
-from app.services.grammar_validator import validate_grammar
+from app.services.grammar.parser import parse_grammar_text
+from app.services.grammar.validator import validate_grammar
 
 
 def test_missing_rhs_raises():
@@ -30,3 +30,17 @@ def test_duplicate_production_warning():
     g = parse_grammar_text("S -> a | a")
     result = validate_grammar(g)
     assert any(w["type"] == "duplicate_production" for w in result["warnings"])
+
+
+def test_non_generating_symbol_warning():
+    # A only produces A, cannot derive any terminal
+    g = parse_grammar_text("S -> A\nA -> A")
+    result = validate_grammar(g)
+    assert any(w["type"] == "non_generating_symbol" for w in result["warnings"])
+
+
+def test_quoted_terminals_parsing():
+    g = parse_grammar_text("S -> 'id' '+' 'id'")
+    assert "id" in g.terminals
+    assert "+" in g.terminals
+    assert "'id'" not in g.terminals
